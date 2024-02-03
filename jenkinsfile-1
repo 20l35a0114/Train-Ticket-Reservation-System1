@@ -11,5 +11,13 @@ pipeline {
             sh "mvn test"
          }
       }
+       stage("deploy code"){
+         steps{
+            sshagent(['tomcat']) {
+    // some block
+             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@54.144.104.104:/opt/tomcat/webapps"
+            }
+         }
+      }
    }
 }    
