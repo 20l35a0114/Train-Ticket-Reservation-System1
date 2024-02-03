@@ -1,12 +1,12 @@
 pipeline {
-    agent any
-    environment{
-         PATH =  "/usr/bin:$PATH"
+   agent any
+   environment{
+      PATH =  "/usr/share/maven:$PATH"
     }
-    stages
-         stage("build code"){
-            steps{
-               sh "mvn clean install"
+   stages
+      stage("build code"){
+         steps{
+            sh "mvn clean install"
       }
    }
 }     
