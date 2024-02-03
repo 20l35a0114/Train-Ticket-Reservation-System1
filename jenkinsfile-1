@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages{
+       stage("git clone"){
+         steps{
+            git branch: 'dev', credentialsId: 'git_credential', url: 'https://github.com/20l35a0114/Train-Ticket-Reservation-System1.git'
+         }
+      }
       stage("build code"){
          steps{
             sh "mvn clean install"
@@ -20,4 +25,5 @@ pipeline {
          }
       }
    }
-}    
+}
+  
