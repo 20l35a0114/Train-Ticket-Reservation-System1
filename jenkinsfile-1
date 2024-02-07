@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+        registry = "20l35a0114/uday"
+        registryCredential = 'docker-jenkins-creds'
+        dockerImage = ''
+    }
     stages{
        stage("git clone"){
          steps{
@@ -16,7 +21,7 @@ pipeline {
             sh "mvn test"
          }
       }
-       stage("deploy code"){
+      stage("deploy code"){
          steps{
             sshagent(['tomcat']) {
     // some block
@@ -24,6 +29,29 @@ pipeline {
             }
          }
       }
+       stage("Build Docker"){
+            steps {
+              script {
+                 dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
+               
+            }
+        }
+        stage("Push Docker"){
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }    
+            }
+        }
+        stage('Remove Image') {
+            steps{
+                sh "docker rmi ${registry}:$BUILD_NUMBER"
+                sh "docker rmi ${registry}:latest"
+            }
+        }
    }
 }
   
