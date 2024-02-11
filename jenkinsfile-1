@@ -36,6 +36,11 @@ pipeline {
             }
          }
       }
+      stage('Image,run as container'){
+         steps{       
+            sh "docker run -itd --name ${dockerImage} -p 8084:8080 20l35a0114/kiran:${params.VERSION}"
+         }  
+      }
         stage("Push Docker"){
             steps {
                 script {
