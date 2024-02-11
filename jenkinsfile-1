@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registry = "20l35a0114/uday"
+        registry = "20l35a0114"
         registryCredential = 'docker_token'
         dockerImage = 'hello-world'
     }
@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Image,run as container'){
             steps{       
-            sh "docker run -itd --name ${dockerImage} -p 8084:8080  ${registry}/${dockerImage}"
+            sh "docker run -itd --name ${dockerImage} -p 8084:8080 ${registry}/${dockerImage}"
             }
         }
         stage("Push Docker"){
