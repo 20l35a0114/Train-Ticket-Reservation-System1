@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        registry = "20l35a0114"
+        registry = "20l35a0114/uday"
         registryCredential = 'docker_token'
-        dockerImage = 'hello-world'
+        dockerImage = ''
     }
     stages{
        stage("git clone"){
