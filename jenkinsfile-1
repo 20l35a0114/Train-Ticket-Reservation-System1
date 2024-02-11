@@ -25,7 +25,7 @@ pipeline {
          steps{
             sshagent(['tomcat']) {
     // some block
-             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@54.227.114.106:/opt/tomcat/webapps"
+             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@54.145.26.100:/opt/tomcat/webapps"
             }
          }
       }
