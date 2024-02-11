@@ -29,28 +29,22 @@ pipeline {
             }
          }
       }
-       stage("Build Docker"){
-            steps {
-              script {
+      stage("Build Docker"){
+         steps {
+            script {
                  dockerImage = docker.build registry + ":$BUILD_NUMBER"
-              }
-               
             }
-        }
-        stage('Image,run as container'){
-            steps{       
-            sh "docker run -itd --name ${dockerImage} -p 8084:8080 ${registry}/${dockerImage}"
-            }
-        }
+         }
+      }
         stage("Push Docker"){
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
-                    }
-                }    
-            }
-        }
+               }
+            }    
+         }
+      }
    }
 }
   
