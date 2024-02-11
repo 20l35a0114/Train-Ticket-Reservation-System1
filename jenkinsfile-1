@@ -1,10 +1,5 @@
 pipeline {
     agent any
-    environment {
-        registry = "20l35a0114/kiran"
-        registryCredential = 'docker_token'
-        dockerImage = ''
-    }
     stages{
        stage("git clone"){
          steps{
@@ -25,29 +20,15 @@ pipeline {
          steps{
             sshagent(['tomcat']) {
     // some block
-             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@54.145.26.100:/opt/tomcat/webapps"
+             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@52.91.222.81:/opt/tomcat/webapps"
             }
          }
       }
       stage("Build Docker"){
          steps {
             script {
-                 dockerImage = docker.build registry + ":$BUILD_NUMBER"
+               sh "docker build -t Ticketsapp:$BUILD_NUMBER ." 
             }
-         }
-      }
-      stage('Image,run as container'){
-         steps{       
-            sh "docker run -itd --name ${dockerImage} -p 8084:8080 20l35a0114/kiran:${params.VERSION}"
-         }  
-      }
-        stage("Push Docker"){
-            steps {
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
-               }
-            }    
          }
       }
    }
