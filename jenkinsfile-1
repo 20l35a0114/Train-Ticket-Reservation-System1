@@ -31,6 +31,16 @@ pipeline {
             }
          }
       }
+      stage("push a image "){
+         steps {
+            script {
+            withCredentials([string(credentialsId: 'dockerpass', variable: 'docker')]) {
+               sh "docker login -u 20l35a0114 -p docker"
+               }
+               sh " docker push 20l35a0114/ticketsapp:${BUILD_NUMBER} "
+            }
+         }
+      }
       stage("run Docker"){
          steps {
             script {
