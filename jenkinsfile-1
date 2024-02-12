@@ -37,14 +37,14 @@ pipeline {
                withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')])  {
                sh 'docker login -u 20l35a0114 -p ${dockerhubpwd}'
                }
-               sh " docker push 20l35a0114/ticketsapp:${BUILD_NUMBER} "
+               sh " docker push 20l35a0114/image:${BUILD_NUMBER} "
             }
          }
       }
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name container -p 8081:8080 20l35a0114/ticketsapp:${BUILD_NUMBER}"
+               sh " docker run -itd --name container -p 8081:8080 20l35a0114/image:${BUILD_NUMBER}"
                sh "docker ps" 
             }
          }
