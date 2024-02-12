@@ -44,10 +44,16 @@ pipeline {
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name container3 -p 8082:8080 20l35a0114/image:${BUILD_NUMBER}"
+               sh " docker run -itd --name container4 -p 8083:8080 20l35a0114/image:${BUILD_NUMBER}"
                sh "docker ps" 
             }
          }
+      }
+      stage('stop pervious container'){
+         steps{       
+              sh 'docker ps -f 20l35a0114/image -q | xargs --no-run-if-empty docker container stop'
+              sh 'docker container ls -a -f 20l35a0114/image  -q | xargs -r docker container rm'
+         }  
       }
    }
 }
