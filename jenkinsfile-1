@@ -34,7 +34,7 @@ pipeline {
       stage("push a image "){
          steps {
             script {
-            withCredentials([string(credentialsId: 'dockerpass', variable: 'docker')]) {
+            withCredentials([string(credentialsId: 'dockercred', variable: 'dockerlog')]) {
                sh "docker login -u 20l35a0114 -p docker"
                }
                sh " docker push 20l35a0114/ticketsapp:${BUILD_NUMBER} "
