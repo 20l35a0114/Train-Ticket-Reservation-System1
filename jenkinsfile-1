@@ -53,7 +53,7 @@ pipeline {
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name ${imagename} -p 8085:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
+               sh " docker run -itd --name mohan -p 8085:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
             }
          }
       }
