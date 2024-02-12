@@ -1,10 +1,10 @@
 pipeline {
     agent any
          environment{
-            imagename = 'trainapp'
+            imagename = 'train'
          }
     stages{
-       stage("git clone"){
+      stage("git clone"){
          steps{
             git branch: 'dev', credentialsId: 'git_credential', url: 'https://github.com/20l35a0114/Train-Ticket-Reservation-System1.git'
          }
@@ -29,35 +29,39 @@ pipeline {
       }
       stage("Build Docker"){
          steps {
-            sshagent(['docker-conn']) {
-    // some block
-               sh " docker build -t 20l35a0114/${imagename}:${BUILD_NUMBER} ." 
+            script {
+                 sh " docker build -t 20l35a0114/${imagename}:${BUILD_NUMBER} ." 
+            }
+               
+         }
+      }
+      stage("push a image "){
+         steps {
+            script {
+               withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')])  {
+               sh 'docker login -u 20l35a0114 -p ${dockerhubpwd}'
+               }
+               sh " docker push 20l35a0114/${imagename}:${BUILD_NUMBER} "
             }
          }
       }
-      // stage("push a image "){
-      //    steps {
-      //       script {
-      //          withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')])  {
-      //          sh 'docker login -u 20l35a0114 -p ${dockerhubpwd}'
-      //          }
-      //          sh " docker push 20l35a0114/${imagename}:${BUILD_NUMBER} "
-      //       }
-      //    }
-      // }
-      // stage('stop pervious container'){
-      //    steps{       
-      //        sh "docker ps -f 20l35a0114/${imagename} -q | xargs --no-run-if-empty docker container stop"
-      //        sh "docker container ls -a -f 20l35a0114/${imagename}  -q | xargs -r docker container rm"
-      //       }
-      //    }
-      // stage("run Docker"){
-      //    steps {
-      //       script {
-      //          sh " docker run -itd --name mohan -p 8085:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
-      //       }
-      //    }
-      // }
+      stage('stop pervious container'){
+         steps{       
+            sshagent(['dockerconn']) {
+              sh "docker ps -f 20l35a0114/${imagename} -q | xargs --no-run-if-empty docker container stop"
+              sh "docker container ls -a -f 20l35a0114/${imagename}  -q | xargs -r docker container rm"
+            }        
+         }
+      }
+      stage("run Docker"){
+         steps {
+            sshagent(['docker-conn']) {
+               script {
+               sh " docker run -itd --name mohan -p 8086:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
+               }     
+            }
+         }
+      }
    }
 }
   
