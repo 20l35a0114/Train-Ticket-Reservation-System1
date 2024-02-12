@@ -1,5 +1,8 @@
 pipeline {
     agent any
+         environment{
+            imagename = 'trainapp'
+         }
     stages{
        stage("git clone"){
          steps{
@@ -27,7 +30,7 @@ pipeline {
       stage("Build Docker"){
          steps {
             script {
-               sh " docker build -t 20l35a0114/image:${BUILD_NUMBER} ." 
+               sh " docker build -t 20l35a0114/${imagename}:${BUILD_NUMBER} ." 
             }
          }
       }
@@ -37,24 +40,23 @@ pipeline {
                withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')])  {
                sh 'docker login -u 20l35a0114 -p ${dockerhubpwd}'
                }
-               sh " docker push 20l35a0114/image:${BUILD_NUMBER} "
+               sh " docker push 20l35a0114/${imagename}:${BUILD_NUMBER} "
             }
          }
       }
+      stage('stop pervious container'){
+         steps{       
+             sh "docker ps -f 20l35a0114/${imagename} -q | xargs --no-run-if-empty docker container stop"
+             sh "docker container ls -a -f 20l35a0114/${imagename}  -q | xargs -r docker container rm"
+            }
+         }
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name container5 -p 8084:8080 20l35a0114/image:${BUILD_NUMBER}"
-               sh "docker ps" 
+               sh " docker run -itd --name ${imagename} -p 8084:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
             }
          }
       }
-      // stage('stop pervious container'){
-      //    steps{       
-      //         sh 'docker ps -f 20l35a0114/image -q | xargs --no-run-if-empty docker container stop'
-      //         sh 'docker container ls -a -f 20l35a0114/image  -q | xargs -r docker container rm'
-      //    }  
-      // }
    }
 }
   
