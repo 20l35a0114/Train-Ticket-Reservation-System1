@@ -44,7 +44,7 @@ pipeline {
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name container1 -p 8082:8080 20l35a0114/image:${BUILD_NUMBER}"
+               sh " docker run -itd --name container2 -p 8082:8080 20l35a0114/image:${BUILD_NUMBER}"
                sh "docker ps" 
             }
          }
