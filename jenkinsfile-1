@@ -44,7 +44,7 @@ pipeline {
       stage("run Docker"){
          steps {
             script {
-               sh " docker run -itd --name ticketapp -p 8081:8080 20l35a0114/ticketsapp:${BUILD_NUMBER}" 
+               sh " docker run -itd --name container -p 8081:8080 20l35a0114/ticketsapp:${BUILD_NUMBER}" 
             }
          }
       }
