@@ -27,7 +27,7 @@ pipeline {
       stage("Build Docker"){
          steps {
             script {
-               sh " docker build -t 20l35a0114/ticketsapp:${BUILD_NUMBER} ." 
+               sh " docker build -t 20l35a0114/image:${BUILD_NUMBER} ." 
             }
          }
       }
