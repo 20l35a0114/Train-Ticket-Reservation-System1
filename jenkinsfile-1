@@ -57,6 +57,7 @@ pipeline {
          steps {
             sshagent(['docker-conn']) {
                script {
+               sh "hostname -I"   
                sh " docker run -itd --name udaymohan -p 8086:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
                }     
             }
