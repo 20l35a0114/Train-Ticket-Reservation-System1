@@ -1,7 +1,7 @@
 pipeline {
     agent any
          environment{
-            imagename = 'train-bus'
+            imagename = 'train-bus-car'
          }
     stages{
       stage("git clone"){
@@ -23,7 +23,7 @@ pipeline {
          steps{
             sshagent(['tomcat']) {
     // some block
-             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@50.16.10.44:/opt/tomcat/webapps"
+             sh "scp -o StrictHostKeyChecking=no target/TrainBook-1.0.0-SNAPSHOT.war ubuntu@54.226.119.216:/opt/tomcat/webapps"
             }
          }
       }
@@ -58,7 +58,7 @@ pipeline {
             sshagent(['docker-conn']) {
                script {
                sh "hostname -I"   
-               sh " docker run -itd --name udaymohan -p 8086:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
+               sh " docker run -itd --name cont -p 8087:8080 20l35a0114/${imagename}:${BUILD_NUMBER}" 
                }     
             }
          }
